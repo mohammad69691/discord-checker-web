@@ -1,3 +1,6 @@
+## 🔴 LIVE DEMO
+https://discord-checker.janic.dev
+
 **Disclaimer:** This tool is for educational purposes only. I am not responsible for damages of any kind that are caused by using this tool.
 
 ## ❓ Information
@@ -8,7 +11,7 @@ This project is an open source tool which allows you to quickly check collect Di
 - Check for working accounts, including badges and other account information
 - Download valid tokens
 
-## 📷 Demo 
+## 📷 Preview 
 ![Demo Image](demo/demo.png)
 
 ## 📝 Contact

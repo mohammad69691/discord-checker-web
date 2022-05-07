@@ -1,42 +1,21 @@
-# Nuxt 3 Minimal Starter
+**Disclaimer:** This tool is for educational purposes only. I am not responsible for damages of any kind that are caused by using this tool.
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+## ❓ Information
+This project is an open source tool which allows you to quickly check collect Discord token. You can easily export valid tokens and import text files containing tokens. 
 
-## Setup
+## 💻 Features
+- Load Discord tokens via files or paste them into the checker
+- Check for working accounts, including badges and other account information
+- Download valid tokens
 
-Make sure to install the dependencies:
+## 📷 Demo 
+![Demo Image](demo/demo.png)
 
-```bash
-# yarn
-yarn install
+## 📝 Contact
+**Discord:** Janic#0474
 
-# npm
-npm install
+## 📜 License
+This project is under license: [MIT License](https://choosealicense.com/licenses/mit/)
 
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.
+![GPLv3 license](https://img.shields.io/badge/License-MIT-blue.svg)
+![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg)

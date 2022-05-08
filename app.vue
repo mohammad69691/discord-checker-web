@@ -84,20 +84,20 @@ function downloadTokens() {
 </script>
 
 <template>
-  <div class="min-h-screen p-2 md:p-4 lg:p-10 dark:bg-gray-900 bg-gray-100">
+  <div class="p-2 min-h-screen bg-gray-100 dark:bg-gray-900 md:p-4 lg:p-10">
     <Title>Discord Token Checker</Title>
-    <div class="flex items-center justify-between">
-      <h1 class="flex items-center dark:text-white text-2xl font-semibold mr-4">
+    <div class="flex justify-between items-center">
+      <h1 class="flex items-center mr-4 text-2xl font-semibold dark:text-white">
         <i class="mr-2 i-carbon-logo-discord" />
         Discord Token Checker
         <a
           href="https://github.com/masterjanic"
-          class="hidden md:inline-flex ml-2 text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-400"
+          class="hidden ml-2 text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 md:inline-flex"
           >by masterjanic</a
         >
       </h1>
 
-      <div class="flex text-xl space-x-2 justify-content-end">
+      <div class="flex space-x-2 text-xl justify-content-end">
         <ColorSwitcher />
         <a
           href="https://github.com/masterjanic/discord-checker-web"
@@ -110,26 +110,26 @@ function downloadTokens() {
       v-model="tokensInput"
       :disabled="isChecking"
       placeholder="Enter your tokens..."
-      class="disabled:opacity-50 mt-4 p-2 font-mono outline-none border-2 rounded border-violet-400 focus:border-violet-500 resize-none bg-gray-200 dark:bg-gray-800 dark:text-gray-200 h-96 w-full"
+      class="p-2 mt-4 w-full h-96 font-mono dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 border-violet-400 focus:border-violet-500 outline-none disabled:opacity-50 resize-none"
     />
 
     <div class="my-5">
       <div class="flex items-center">
-        <label class="text-black dark:text-white font-semibold">Delay:</label>
+        <label class="font-semibold text-black dark:text-white">Delay:</label>
         <Tooltip class="text-white" title="This is the wait time between each request in milliseconds.">
-          <i class="ml-2 flex text-gray-700 dark:text-gray-50 dark:hover:text-gray-200 i-carbon-help-filled" />
+          <i class="flex ml-2 text-gray-700 dark:text-gray-50 dark:hover:text-gray-200 i-carbon-help-filled" />
         </Tooltip>
       </div>
 
       <input
         v-model="delay"
-        class="w-full md:w-1/2 mt-3 rounded-full overflow-hidden appearance-none bg-gray-400 h-4"
+        class="overflow-hidden mt-3 w-full h-4 bg-gray-400 rounded-full appearance-none md:w-1/2"
         type="range"
         min="0"
         max="30000"
         step="100"
       />
-      <div class="flex justify-between text-gray-700 dark:text-gray-400 text-sm w-full md:w-6/12">
+      <div class="flex justify-between w-full text-sm text-gray-700 dark:text-gray-400 md:w-6/12">
         <span>0 ms</span>
         <span>{{ delay }}</span>
         <span>30000 ms</span>
@@ -140,40 +140,40 @@ function downloadTokens() {
       <input ref="fileUpload" class="hidden" type="file" accept=".txt" hidden multiple @change="loadFile" />
       <button
         :disabled="isChecking"
-        class="flex items-center mt-2 p-2 bg-yellow-500 hover:bg-yellow-600 rounded text-gray-800 transition font-semibold disabled:opacity-50"
+        class="flex items-center p-2 mt-2 font-semibold text-gray-800 bg-yellow-500 hover:bg-yellow-600 rounded disabled:opacity-50 transition"
         @click="() => fileUpload.click()"
       >
-        <i class="i-carbon-upload mr-2" />
+        <i class="mr-2 i-carbon-upload" />
         Load File(s)
       </button>
 
       <button
         :disabled="isChecking"
-        class="flex items-center mt-2 p-2 bg-violet-500 hover:bg-violet-600 rounded text-gray-50 transition font-semibold disabled:opacity-50"
+        class="flex items-center p-2 mt-2 font-semibold text-gray-50 bg-violet-500 hover:bg-violet-600 rounded disabled:opacity-50 transition"
         @click="checkTokens"
       >
-        <i class="i-carbon-restart mr-2" />
+        <i class="mr-2 i-carbon-restart" />
         Check Tokens
       </button>
     </div>
 
     <div v-if="accounts.length > 0" class="my-10 dark:text-white">
-      <h2 class="font-semibold tracking-wide text-2xl text-center">Valid Accounts ({{ accounts.length }})</h2>
+      <h2 class="text-2xl font-semibold tracking-wide text-center">Valid Accounts ({{ accounts.length }})</h2>
       <hr />
 
       <button
         :disabled="isChecking"
-        class="mb-4 flex items-center mt-2 p-2 bg-green-500 hover:bg-green-600 rounded text-gray-50 transition font-semibold disabled:opacity-50"
+        class="flex items-center p-2 mt-2 mb-4 font-semibold text-gray-50 bg-green-500 hover:bg-green-600 rounded disabled:opacity-50 transition"
         @click="downloadTokens()"
       >
-        <i class="i-carbon-download mr-2" />
+        <i class="mr-2 i-carbon-download" />
         Download Tokens
       </button>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row gap-4">
+      <div class="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <div
           v-for="account of accounts"
           :key="account.user.id"
-          class="bg-gray-200 drop-shadow-lg dark:drop-shadow-none dark:bg-gray-800 p-5 rounded-lg transition ease-in-out hover:-translate-y-1 hover:scale-102"
+          class="p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
         >
           <div class="flex justify-between">
             <div class="flex items-center space-x-4">
@@ -182,7 +182,7 @@ function downloadTokens() {
               <div>
                 <div class="flex items-center font-semibold">
                   <span>{{ account.user.username }}</span>
-                  <span class="text-gray-600 dark:text-gray-400 text-xs">#{{ account.user.discriminator }}</span>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">#{{ account.user.discriminator }}</span>
                   <BadgeList :user="account.user" badge-size="18" class="ml-2" />
                 </div>
                 <small class="text-gray-700 dark:text-gray-400">{{ account.user.id }}</small>
@@ -190,7 +190,7 @@ function downloadTokens() {
             </div>
 
             <button
-              class="flex i-carbon-close-filled text-red-400 hover:text-red-500"
+              class="flex text-red-400 hover:text-red-500 i-carbon-close-filled"
               @click="removeAccount(account.user.id)"
             />
           </div>
@@ -199,14 +199,14 @@ function downloadTokens() {
     </div>
 
     <div v-if="invalid.length > 0" class="my-10 dark:text-white">
-      <h2 class="font-semibold tracking-wide text-2xl text-center">Invalid Tokens ({{ invalid.length }})</h2>
+      <h2 class="text-2xl font-semibold tracking-wide text-center">Invalid Tokens ({{ invalid.length }})</h2>
       <hr />
 
-      <div class="grid grid-cols-1 xl:grid-cols-2 grid-flow-row gap-4">
+      <div class="grid grid-cols-1 grid-flow-row gap-4 xl:grid-cols-2">
         <div
           v-for="invalidEntry of invalid"
           :key="invalidEntry.token"
-          class="flex flex-col bg-gray-200 drop-shadow-lg dark:drop-shadow-none dark:bg-gray-800 p-5 rounded-lg transition ease-in-out hover:-translate-y-1 hover:scale-102"
+          class="flex flex-col p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
         >
           <span class="break-all">{{ invalidEntry.token }}</span>
           <small class="text-gray-700 dark:text-gray-400">User ID: {{ invalidEntry.userId }}</small>
@@ -215,10 +215,10 @@ function downloadTokens() {
     </div>
 
     <div v-if="duplicate > 0" class="my-10 text-white">
-      <h2 class="font-semibold tracking-wide text-2xl text-center">Duplicate Tokens ({{ duplicate }})</h2>
+      <h2 class="text-2xl font-semibold tracking-wide text-center">Duplicate Tokens ({{ duplicate }})</h2>
       <hr />
 
-      <div class="text-center bg-violet-800 p-3 rounded-lg">
+      <div class="p-3 text-center bg-violet-800 rounded-lg">
         <span class="font-semibold text-white"
           >Duplicate tokens were removed before sending requests to the Discord API.</span
         >

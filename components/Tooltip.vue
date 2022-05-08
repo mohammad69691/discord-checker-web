@@ -1,7 +1,7 @@
 <template>
   <div class="has-tooltip">
     <span
-      class="tooltip rounded-lg shadow-lg p-1.5 bg-white text-black dark:bg-black dark:text-white -mt-9 font-semibold"
+      class="p-1.5 -mt-9 font-semibold text-black dark:text-white bg-white dark:bg-black rounded-lg shadow-lg tooltip"
       >{{ title }}</span
     >
     <slot />

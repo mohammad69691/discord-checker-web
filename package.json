@@ -16,11 +16,12 @@
     "@nuxtjs/color-mode": "^3.0.2",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@nuxtjs/tailwindcss": "^5.0.4",
-    "@unocss/nuxt": "^0.33.0",
+    "@unocss/nuxt": "^0.33.1",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-tailwindcss": "^3.5.0",
     "nuxt": "3.0.0-rc.2",
     "prettier": "^2.6.2"
   },

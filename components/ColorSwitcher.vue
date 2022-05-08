@@ -1,6 +1,6 @@
 <template>
   <i
-    class="hover:cursor-pointer dark:bg-gray-50 dark:hover:bg-gray-200"
+    class="dark:bg-gray-50 dark:hover:bg-gray-200 hover:cursor-pointer"
     :class="isDarkMode ? 'i-carbon-moon' : 'i-carbon-sun'"
     @click="$colorMode.preference = isDarkMode ? 'light' : 'dark'"
   />

@@ -3,10 +3,7 @@ import { defineNuxtConfig } from 'nuxt';
 export default defineNuxtConfig({
   head: {
     meta: [
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1, maximum-scale=1',
-      },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1' },
       { name: 'robots', content: 'index,follow' },
       { name: 'theme-color', content: '#5865F2' },
     ],

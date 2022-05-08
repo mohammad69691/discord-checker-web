@@ -13,9 +13,7 @@ function loadFile() {
 
     const reader = new FileReader();
     reader.onload = ({ target }) => {
-      const tokens = target.result.match(
-        /mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27}/g
-      );
+      const tokens = target.result.match(/mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27}/g);
 
       tokensInput.value += [...new Set(tokens)].join('\n');
     };
@@ -33,9 +31,7 @@ async function checkTokens() {
   isChecking.value = true;
 
   const rawValue = tokensInput.value.trim();
-  const matchedTokens = rawValue.match(
-    /mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27}/g
-  );
+  const matchedTokens = rawValue.match(/mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27}/g);
 
   if (!matchedTokens) {
     return;
@@ -74,9 +70,7 @@ function downloadTokens() {
   const link = document.createElement('a');
   link.setAttribute(
     'href',
-    `data:text/plain;charset=utf-8,${encodeURIComponent(
-      accounts.value.map((account) => account.token).join('\n')
-    )}`
+    `data:text/plain;charset=utf-8,${encodeURIComponent(accounts.value.map((account) => account.token).join('\n'))}`
   );
   link.setAttribute('download', 'tokens.txt');
 
@@ -122,13 +116,8 @@ function downloadTokens() {
     <div class="my-5">
       <div class="flex items-center">
         <label class="text-black dark:text-white font-semibold">Delay:</label>
-        <Tooltip
-          class="text-white"
-          title="This is the wait time between each request in milliseconds."
-        >
-          <i
-            class="ml-2 flex text-gray-700 dark:text-gray-50 dark:hover:text-gray-200 i-carbon-help-filled"
-          />
+        <Tooltip class="text-white" title="This is the wait time between each request in milliseconds.">
+          <i class="ml-2 flex text-gray-700 dark:text-gray-50 dark:hover:text-gray-200 i-carbon-help-filled" />
         </Tooltip>
       </div>
 
@@ -140,9 +129,7 @@ function downloadTokens() {
         max="30000"
         step="100"
       />
-      <div
-        class="flex justify-between text-gray-700 dark:text-gray-400 text-sm w-full md:w-6/12"
-      >
+      <div class="flex justify-between text-gray-700 dark:text-gray-400 text-sm w-full md:w-6/12">
         <span>0 ms</span>
         <span>{{ delay }}</span>
         <span>30000 ms</span>
@@ -150,15 +137,7 @@ function downloadTokens() {
     </div>
 
     <div class="flex space-x-2">
-      <input
-        ref="fileUpload"
-        class="hidden"
-        type="file"
-        accept=".txt"
-        hidden
-        multiple
-        @change="loadFile"
-      />
+      <input ref="fileUpload" class="hidden" type="file" accept=".txt" hidden multiple @change="loadFile" />
       <button
         :disabled="isChecking"
         class="flex items-center mt-2 p-2 bg-yellow-500 hover:bg-yellow-600 rounded text-gray-800 transition font-semibold disabled:opacity-50"
@@ -179,9 +158,7 @@ function downloadTokens() {
     </div>
 
     <div v-if="accounts.length > 0" class="my-10 dark:text-white">
-      <h2 class="font-semibold tracking-wide text-2xl text-center">
-        Valid Accounts ({{ accounts.length }})
-      </h2>
+      <h2 class="font-semibold tracking-wide text-2xl text-center">Valid Accounts ({{ accounts.length }})</h2>
       <hr />
 
       <button
@@ -192,9 +169,7 @@ function downloadTokens() {
         <i class="i-carbon-download mr-2" />
         Download Tokens
       </button>
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row gap-4"
-      >
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-flow-row gap-4">
         <div
           v-for="account of accounts"
           :key="account.user.id"
@@ -202,27 +177,15 @@ function downloadTokens() {
         >
           <div class="flex justify-between">
             <div class="flex items-center space-x-4">
-              <AccountAvatar
-                size="64"
-                :user="account.user"
-                class="drop-shadow-md"
-              />
+              <AccountAvatar size="64" :user="account.user" class="drop-shadow-md" />
 
               <div>
                 <div class="flex items-center font-semibold">
                   <span>{{ account.user.username }}</span>
-                  <span class="text-gray-600 dark:text-gray-400 text-xs"
-                    >#{{ account.user.discriminator }}</span
-                  >
-                  <BadgeList
-                    :user="account.user"
-                    badge-size="18"
-                    class="ml-2"
-                  />
+                  <span class="text-gray-600 dark:text-gray-400 text-xs">#{{ account.user.discriminator }}</span>
+                  <BadgeList :user="account.user" badge-size="18" class="ml-2" />
                 </div>
-                <small class="text-gray-700 dark:text-gray-400">{{
-                  account.user.id
-                }}</small>
+                <small class="text-gray-700 dark:text-gray-400">{{ account.user.id }}</small>
               </div>
             </div>
 
@@ -236,9 +199,7 @@ function downloadTokens() {
     </div>
 
     <div v-if="invalid.length > 0" class="my-10 dark:text-white">
-      <h2 class="font-semibold tracking-wide text-2xl text-center">
-        Invalid Tokens ({{ invalid.length }})
-      </h2>
+      <h2 class="font-semibold tracking-wide text-2xl text-center">Invalid Tokens ({{ invalid.length }})</h2>
       <hr />
 
       <div class="grid grid-cols-1 xl:grid-cols-2 grid-flow-row gap-4">
@@ -248,23 +209,18 @@ function downloadTokens() {
           class="flex flex-col bg-gray-200 drop-shadow-lg dark:drop-shadow-none dark:bg-gray-800 p-5 rounded-lg transition ease-in-out hover:-translate-y-1 hover:scale-102"
         >
           <span class="break-all">{{ invalidEntry.token }}</span>
-          <small class="text-gray-700 dark:text-gray-400"
-            >User ID: {{ invalidEntry.userId }}</small
-          >
+          <small class="text-gray-700 dark:text-gray-400">User ID: {{ invalidEntry.userId }}</small>
         </div>
       </div>
     </div>
 
     <div v-if="duplicate > 0" class="my-10 text-white">
-      <h2 class="font-semibold tracking-wide text-2xl text-center">
-        Duplicate Tokens ({{ duplicate }})
-      </h2>
+      <h2 class="font-semibold tracking-wide text-2xl text-center">Duplicate Tokens ({{ duplicate }})</h2>
       <hr />
 
       <div class="text-center bg-violet-800 p-3 rounded-lg">
         <span class="font-semibold text-white"
-          >Duplicate tokens were removed before sending requests to the Discord
-          API.</span
+          >Duplicate tokens were removed before sending requests to the Discord API.</span
         >
       </div>
     </div>

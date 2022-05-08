@@ -4,13 +4,7 @@ const GATEWAY_URL = 'https://discord.com/api/v9';
 
 async function apiRequest(
   uri,
-  {
-    data = null,
-    token = null,
-    returnBoolean = false,
-    delay = 0,
-    deleteRequest = false,
-  } = {}
+  { data = null, token = null, returnBoolean = false, delay = 0, deleteRequest = false } = {}
 ) {
   try {
     if (delay && delay > 0) {
@@ -20,20 +14,10 @@ async function apiRequest(
     let response;
     if (!data) {
       response = !deleteRequest
-        ? await axios.get(
-            GATEWAY_URL + uri,
-            token ? { headers: { Authorization: token } } : {}
-          )
-        : await axios.delete(
-            GATEWAY_URL + uri,
-            token ? { headers: { Authorization: token } } : {}
-          );
+        ? await axios.get(GATEWAY_URL + uri, token ? { headers: { Authorization: token } } : {})
+        : await axios.delete(GATEWAY_URL + uri, token ? { headers: { Authorization: token } } : {});
     } else {
-      response = await axios.post(
-        GATEWAY_URL + uri,
-        data,
-        token ? { headers: { Authorization: token } } : {}
-      );
+      response = await axios.post(GATEWAY_URL + uri, data, token ? { headers: { Authorization: token } } : {});
     }
     return returnBoolean ? true : response.data;
   } catch (err) {

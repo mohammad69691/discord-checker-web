@@ -1,10 +1,6 @@
 <template>
   <div class="flex items-center">
-    <Tooltip
-      v-for="(flagName, index) in ownedFlags"
-      :key="`f-${flagName}`"
-      :title="titleCase(flagName)"
-    >
+    <Tooltip v-for="(flagName, index) in ownedFlags" :key="`f-${flagName}`" :title="titleCase(flagName)">
       <img
         class="drop-shadow dark:drop-shadow-none"
         :class="{
@@ -17,10 +13,7 @@
       />
     </Tooltip>
 
-    <Tooltip
-      v-if="user.premium_type > 0"
-      :title="['Nitro Classic', 'Nitro Full'][user.premium_type - 1]"
-    >
+    <Tooltip v-if="user.premium_type > 0" :title="['Nitro Classic', 'Nitro Full'][user.premium_type - 1]">
       <img
         class="drop-shadow dark:drop-shadow-none"
         src="/img/badges/nitro.svg"
@@ -76,8 +69,7 @@ export default {
     titleCase(str) {
       const splitStr = str.replaceAll('_', ' ').toLowerCase().split(' ');
       for (let i = 0; i < splitStr.length; i++) {
-        splitStr[i] =
-          splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
       }
 
       return splitStr.join(' ');

@@ -13,10 +13,10 @@
   "license": "MIT",
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.4",
-    "@nuxtjs/color-mode": "^3.0.2",
+    "@nuxtjs/color-mode": "^3.0.3",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@nuxtjs/tailwindcss": "^5.0.4",
-    "@unocss/nuxt": "^0.33.1",
+    "@unocss/nuxt": "^0.33.2",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",

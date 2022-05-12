@@ -199,33 +199,7 @@ function downloadTokens() {
         <i class="mr-2 i-carbon-download" />
         Download Tokens
       </button>
-      <div class="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div
-          v-for="account of verifiedAccounts"
-          :key="account.user.id"
-          class="p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
-        >
-          <div class="flex justify-between">
-            <div class="flex items-center space-x-4">
-              <AccountAvatar size="64" :user="account.user" class="drop-shadow-md" />
-
-              <div>
-                <div class="flex items-center font-semibold">
-                  <span>{{ account.user.username }}</span>
-                  <span class="text-xs text-gray-600 dark:text-gray-400">#{{ account.user.discriminator }}</span>
-                  <BadgeList :user="account.user" badge-size="18" class="ml-2" />
-                </div>
-                <small class="text-gray-700 dark:text-gray-400">{{ account.user.id }}</small>
-              </div>
-            </div>
-
-            <button
-              class="flex text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 i-carbon-close-filled"
-              @click="removeAccount(account.user.id)"
-            />
-          </div>
-        </div>
-      </div>
+      <AccountList :accounts="verifiedAccounts" @delete="(id) => removeAccount(id)" />
     </div>
 
     <div v-if="unverifiedAccounts.length > 0" class="my-10 dark:text-white">
@@ -233,34 +207,7 @@ function downloadTokens() {
         Unverified Accounts ({{ unverifiedAccounts.length }})
       </h2>
       <hr />
-
-      <div class="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div
-          v-for="account of unverifiedAccounts"
-          :key="account.user.id"
-          class="p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
-        >
-          <div class="flex justify-between">
-            <div class="flex items-center space-x-4">
-              <AccountAvatar size="64" :user="account.user" class="drop-shadow-md" />
-
-              <div>
-                <div class="flex items-center font-semibold">
-                  <span>{{ account.user.username }}</span>
-                  <span class="text-xs text-gray-600 dark:text-gray-400">#{{ account.user.discriminator }}</span>
-                  <BadgeList :user="account.user" badge-size="18" class="ml-2" />
-                </div>
-                <small class="text-gray-700 dark:text-gray-400">{{ account.user.id }}</small>
-              </div>
-            </div>
-
-            <button
-              class="flex text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 i-carbon-close-filled"
-              @click="removeAccount(account.user.id)"
-            />
-          </div>
-        </div>
-      </div>
+      <AccountList :accounts="unverifiedAccounts" @delete="(id) => removeAccount(id)" />
     </div>
 
     <div v-if="invalidAccounts.length > 0" class="my-10 dark:text-white">

@@ -138,7 +138,7 @@ function downloadTokens() {
       v-model="tokensInput"
       :disabled="isChecking"
       placeholder="Enter your tokens..."
-      class="p-2 mt-4 w-full h-96 font-mono dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 border-violet-400 focus:border-violet-500 outline-none disabled:opacity-50 resize-none"
+      class="p-2 mt-4 w-full h-96 font-mono text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 border-violet-400 focus:border-violet-500 outline-none disabled:opacity-50 resize-none"
     />
 
     <div class="my-5">
@@ -157,7 +157,7 @@ function downloadTokens() {
         max="30000"
         step="100"
       />
-      <div class="flex justify-between w-full text-sm text-gray-700 dark:text-gray-400 md:w-6/12">
+      <div class="flex justify-between w-full text-sm text-gray-900 dark:text-gray-400 md:w-6/12">
         <span>0 ms</span>
         <span>{{ delay }}</span>
         <span>30000 ms</span>
@@ -168,7 +168,7 @@ function downloadTokens() {
       <input ref="fileUpload" class="hidden" type="file" accept=".txt" hidden multiple @change="loadFile" />
       <button
         :disabled="isChecking"
-        class="flex items-center p-2 mt-2 font-semibold text-gray-800 bg-yellow-500 hover:bg-yellow-600 rounded disabled:opacity-50 transition"
+        class="flex items-center p-2 mt-2 font-semibold text-gray-800 bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 rounded disabled:opacity-50 transition"
         @click="() => fileUpload.click()"
       >
         <i class="mr-2 i-carbon-upload" />
@@ -177,7 +177,7 @@ function downloadTokens() {
 
       <button
         :disabled="isChecking"
-        class="flex items-center p-2 mt-2 font-semibold text-gray-50 bg-violet-500 hover:bg-violet-600 rounded disabled:opacity-50 transition"
+        class="flex items-center p-2 mt-2 font-semibold text-gray-50 bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 rounded disabled:opacity-50 transition"
         @click="checkTokens"
       >
         <i class="mr-2 i-carbon-restart" />
@@ -220,7 +220,7 @@ function downloadTokens() {
             </div>
 
             <button
-              class="flex text-red-400 hover:text-red-500 i-carbon-close-filled"
+              class="flex text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 i-carbon-close-filled"
               @click="removeAccount(account.user.id)"
             />
           </div>
@@ -255,7 +255,7 @@ function downloadTokens() {
             </div>
 
             <button
-              class="flex text-red-400 hover:text-red-500 i-carbon-close-filled"
+              class="flex text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 i-carbon-close-filled"
               @click="removeAccount(account.user.id)"
             />
           </div>

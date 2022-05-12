@@ -1,6 +1,6 @@
 {
   "name": "discord-checker-web",
-  "description": "A web-based Discord token checker.",
+  "description": "A fast, web-based Discord token checker.",
   "author": "masterjanic",
   "version": "1.0.0",
   "private": true,
@@ -22,7 +22,7 @@
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-tailwindcss": "^3.5.0",
-    "nuxt": "3.0.0-rc.2",
+    "nuxt": "3.0.0-rc.3",
     "prettier": "^2.6.2"
   },
   "dependencies": {

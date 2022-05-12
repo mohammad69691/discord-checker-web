@@ -1,11 +1,8 @@
 <template>
-  <div class="flex items-center">
-    <Tooltip v-for="(flagName, index) in ownedFlags" :key="`f-${flagName}`" :title="titleCase(flagName)">
+  <div class="flex items-center space-x-1">
+    <Tooltip v-for="flagName in ownedFlags" :key="`f-${flagName}`" :title="titleCase(flagName)">
       <img
         class="drop-shadow dark:drop-shadow-none"
-        :class="{
-          'mr-1': ownedFlags.length > 1 && index !== ownedFlags.length - 1,
-        }"
         :src="`/img/badges/${flagName.toLowerCase()}.svg`"
         :height="flagName === 'VERIFIED_BOT' ? 17 : badgeSize"
         :width="flagName === 'VERIFIED_BOT' ? 40 : 15"
@@ -17,7 +14,6 @@
       <img
         class="drop-shadow dark:drop-shadow-none"
         src="/img/badges/nitro.svg"
-        :class="{ 'ml-1': ownedFlags.length > 0 }"
         :height="badgeSize"
         :width="badgeSize"
         alt="Nitro"

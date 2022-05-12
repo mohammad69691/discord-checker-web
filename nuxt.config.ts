@@ -36,4 +36,10 @@ export default defineNuxtConfig({
     },
     attributify: false,
   },
+  runtimeConfig: {
+    public: {
+      ANALYTICS_URL: process.env.ANALYTICS_URL,
+      GATEWAY_URL: process.env.GATEWAY_URL || 'https://discord.com/api/v9',
+    },
+  },
 });

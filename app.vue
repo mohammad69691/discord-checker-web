@@ -2,6 +2,8 @@
 import axios from 'axios';
 
 const { ANALYTICS_URL } = useRuntimeConfig().public;
+// TODO: Remove left hand alternation when mfa tokens become invalid.
+const tokenRegex = /mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27,38}/g;
 
 const fileUpload = ref(null);
 const tokensInput = ref('');
@@ -22,8 +24,7 @@ function loadFile() {
 
     const reader = new FileReader();
     reader.onload = ({ target }) => {
-      const tokens = target.result.match(/mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27}/g);
-
+      const tokens = target.result.match(tokenRegex);
       tokensInput.value += [...new Set(tokens)].join('\n');
     };
 
@@ -38,7 +39,7 @@ async function checkTokens() {
   invalidAccounts.value = [];
 
   const rawValue = tokensInput.value.trim();
-  const matchedTokens = rawValue.match(/mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27}/g);
+  const matchedTokens = rawValue.match(tokenRegex);
 
   if (!matchedTokens) {
     return;
@@ -134,11 +135,22 @@ function downloadTokens() {
       </div>
     </div>
 
+    <div
+      class="flex items-center py-3 px-4 my-4 text-sm font-bold text-gray-800 bg-yellow-400 dark:bg-yellow-500 rounded-lg"
+      role="alert"
+    >
+      <i class="mr-2 i-carbon-warning-alt-filled" />
+      <span
+        >Discord recently increased the security of their tokens. Tokens starting with
+        <code class="mx-0.5 text-red-600">mfa.</code> or of <code class="mx-0.5 text-red-600">length 27</code> will not
+        be supported in near future.</span
+      >
+    </div>
     <textarea
       v-model="tokensInput"
       :disabled="isChecking"
       placeholder="Enter your tokens..."
-      class="p-2 mt-4 w-full h-96 font-mono text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 border-violet-400 focus:border-violet-500 outline-none disabled:opacity-50 resize-none"
+      class="p-2 w-full h-96 font-mono text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 border-violet-400 focus:border-violet-500 outline-none disabled:opacity-50 resize-none"
     />
 
     <div class="my-5">

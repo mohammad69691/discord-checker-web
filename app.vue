@@ -142,7 +142,7 @@ function downloadTokens() {
       <i class="mr-2 i-carbon-warning-alt-filled" />
       <span
         >Discord recently increased the security of their tokens. Tokens starting with
-        <code class="mx-0.5 text-red-600">mfa.</code> or of <code class="mx-0.5 text-red-600">length 27</code> will not
+        <code class="mx-0.5 text-red-600">mfa.</code> or of <code class="mx-0.5 text-red-600">length 59</code> will not
         be supported in near future.</span
       >
     </div>

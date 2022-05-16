@@ -150,6 +150,7 @@ function downloadTokens() {
       v-model="tokensInput"
       :disabled="isChecking"
       placeholder="Enter your tokens..."
+      spellcheck="false"
       class="p-2 w-full h-96 font-mono text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 border-violet-400 focus:border-violet-500 outline-none disabled:opacity-50 resize-none"
     />
 

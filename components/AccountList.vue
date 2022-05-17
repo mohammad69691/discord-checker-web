@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'AccountCard',
+  name: 'AccountList',
   props: {
     accounts: {
       type: Array,

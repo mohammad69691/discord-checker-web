@@ -2,7 +2,7 @@
   "name": "discord-checker-web",
   "description": "A fast, web-based Discord token checker.",
   "author": "masterjanic",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "build": "nuxt build",

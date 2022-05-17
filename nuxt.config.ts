@@ -6,7 +6,10 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
       meta: [
-        { name: 'description', content: 'A fast, web-based Discord token checker.' },
+        {
+          name: 'description',
+          content: 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.',
+        },
         { name: 'keywords', content: 'Discord, Discord Tokens, Token Stealer, Token Checker, Discord Tools' },
         { name: 'robots', content: 'index, follow' },
         { name: 'theme-color', content: '#5865F2' },

@@ -1,6 +1,6 @@
 <template>
   <img
-    :src="imagePath"
+    :src="`${imagePath}?size=${size}`"
     class="rounded-full shadow"
     :alt="`Avatar of ${tag}`"
     :width="size"
@@ -45,14 +45,11 @@ export default {
 
       if (this.imageError || !this.user || !this.user.avatar) {
         const uri = this.user && this.user.discriminator ? this.user.discriminator % 5 : Math.floor(Math.random() * 6);
-        const fallbackImage = `${CDN_URL}/embed/avatars/${uri}.${this.format}`;
-        return `${fallbackImage}?size=${this.size}`;
+        return `${CDN_URL}/embed/avatars/${uri}.${this.format}`;
       }
 
       const isAnimated = this.user.avatar.startsWith('a_');
-      return `${CDN_URL}/avatars/${this.user.id}/${this.user.avatar}.${isAnimated ? 'gif' : this.format}?size=${
-        this.size
-      }`;
+      return `${CDN_URL}/avatars/${this.user.id}/${this.user.avatar}.${isAnimated ? 'gif' : this.format}`;
     },
   },
 };

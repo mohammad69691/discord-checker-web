@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const { ANALYTICS_URL } = useRuntimeConfig().public;
 // TODO: Remove left hand alternation when mfa tokens become invalid.
-const tokenRegex = /mfa\.[\w-]{84}|[A-Z][\w-]{23}\.[\w-]{6}\.[\w-]{27,38}/g;
+const tokenRegex = /mfa\.[\w-]{84}|[A-Za-z\d]{24}\.[\w-]{6}\.[\w-]{27,38}/g;
 
 const fileUpload = ref(null);
 const tokensInput = ref('');
@@ -62,7 +62,7 @@ async function checkTokens() {
         continue;
       }
 
-      if (base64Id === 'mfa' || verifiedAccounts.value.length === 0) {
+      if (base64Id === 'mfa' || isNaN(decodedId) || verifiedAccounts.value.length === 0) {
         invalidAccounts.value.push({ token, user: null });
         continue;
       }

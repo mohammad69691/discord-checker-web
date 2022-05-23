@@ -2,7 +2,7 @@ module.exports = {
   theme: {},
   plugins: [],
   content: [
-    'omponents/**/*.{vue,js}',
+    'components/**/*.{vue,js}',
     'layouts/**/*.vue',
     'pages/**/*.vue',
     'composables/**/*.{js,ts}',

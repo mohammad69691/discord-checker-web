@@ -32,7 +32,7 @@ export default defineComponent({
     },
     format: {
       type: String,
-      default: 'png',
+      default: 'webp',
     },
   },
   data: () => ({ imageError: false }),

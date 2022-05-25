@@ -1,34 +1,36 @@
-import axios from 'axios';
+import { BillingCountryResponse, DiscordUser } from '~/utils/types';
 
-async function apiRequest(
-  uri: string,
-  { data = null, token = null, returnBoolean = false, delay = 0, method = 'GET' } = {}
-) {
+type RequestConfig = {
+  data?: object;
+  token?: string;
+  delay?: number;
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+};
+
+async function apiRequest(uri: string, config: RequestConfig): Promise<any> {
+  const { data = null, token = null, delay = 0, method = 'GET' } = config;
   try {
     if (delay && delay > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
 
     const url = useRuntimeConfig().public.GATEWAY_URL + uri;
-    const response = await axios.request({ url, data, method, headers: token ? { Authorization: token } : {} });
-
-    return returnBoolean ? true : response.data;
+    return await $fetch(url, { method, body: data, headers: token ? { Authorization: token } : {} });
   } catch (err) {
     if (err.response && err.response.status === 429) {
-      const waitTime = err.response.data.retry_after * 1000;
-      return apiRequest(uri, { data, token, returnBoolean, delay: waitTime });
+      return apiRequest(uri, { data, token, delay: err.response.data.retry_after * 1000 });
     }
 
-    return returnBoolean ? false : null;
+    return null;
   }
 }
 
-function fetchUser(userId = '@me', config = {}) {
+function fetchUser(userId: string = '@me', config: RequestConfig = {}): Promise<DiscordUser | null> {
   return apiRequest(`/users/${userId}`, config);
 }
 
-function fetchBillingCountry(config = {}) {
-  return apiRequest(`/users/@me/billing/country-code`, config);
+function fetchBillingCountry(config: RequestConfig = {}): Promise<BillingCountryResponse | null> {
+  return apiRequest('/users/@me/billing/country-code', config);
 }
 
 export { fetchUser, fetchBillingCountry };

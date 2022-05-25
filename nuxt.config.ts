@@ -16,9 +16,15 @@ export default defineNuxtConfig({
         { property: 'og:title', content: 'Online Discord Token Checker' },
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: 'Discord Token Checker' },
-        { property: 'og:description', content: 'A fast, web-based Discord token checker.' },
+        {
+          property: 'og:description',
+          content: 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.',
+        },
         { name: 'twitter:title', content: 'Online Discord Token Checker' },
-        { name: 'twitter:description', content: 'A fast, web-based Discord token checker.' },
+        {
+          name: 'twitter:description',
+          content: 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.',
+        },
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },

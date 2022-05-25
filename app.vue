@@ -243,7 +243,7 @@ function downloadTokens() {
 
       <button
         :disabled="isChecking"
-        class="flex items-center p-2 mt-2 mb-4 font-semibold text-gray-50 bg-green-500 hover:bg-green-600 rounded disabled:opacity-50 transition"
+        class="p-2 mt-2 mb-4 font-semibold text-gray-50 bg-green-500 hover:bg-green-600 rounded disabled:opacity-50 transition"
         @click="downloadTokens()"
       >
         <FontAwesomeIcon icon="download" class="mr-2" />

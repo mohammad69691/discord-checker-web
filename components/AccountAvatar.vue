@@ -45,7 +45,7 @@ export default defineComponent({
 
       if (this.imageError || !this.user || !this.user.avatar) {
         const uri = this.user && this.user.discriminator ? this.user.discriminator % 5 : Math.floor(Math.random() * 6);
-        return `${CDN_URL}/embed/avatars/${uri}.${this.format}`;
+        return `${CDN_URL}/embed/avatars/${uri}.png`;
       }
 
       const isAnimated = this.user.avatar.startsWith('a_');

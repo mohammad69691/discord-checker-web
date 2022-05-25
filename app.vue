@@ -101,7 +101,7 @@ function downloadTokens() {
       verifiedAccounts.value.map((account) => account.tokens).join('\n')
     )}`
   );
-  link.setAttribute('download', 'tokens.txt');
+  link.setAttribute('download', `tokens-${new Date().toLocaleDateString('en-US').replaceAll('/', '_')}.txt`);
 
   link.style.display = 'none';
   document.body.appendChild(link);

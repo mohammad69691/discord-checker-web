@@ -10,7 +10,7 @@
 export default defineComponent({
   name: 'ColorSwitcher',
   computed: {
-    isDarkMode() {
+    isDarkMode(): boolean {
       return this.$colorMode.preference === 'dark';
     },
   },

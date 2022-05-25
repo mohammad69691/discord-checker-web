@@ -1,5 +1,5 @@
 <template>
-  <div class="has-tooltip">
+  <div class="hover:cursor-pointer has-tooltip">
     <span
       class="p-1.5 -mt-9 font-semibold text-black dark:text-white bg-white dark:bg-black rounded-lg shadow-lg tooltip"
       >{{ title }}</span

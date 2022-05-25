@@ -37,10 +37,10 @@ export default defineComponent({
   },
   data: () => ({ imageError: false }),
   computed: {
-    tag() {
+    tag(): string {
       return this.user ? `${this.user.username}#${this.user.discriminator}` : 'Unknown User';
     },
-    imagePath() {
+    imagePath(): string {
       const CDN_URL = 'https://cdn.discordapp.com';
 
       if (this.imageError || !this.user || !this.user.avatar) {

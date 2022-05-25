@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 grid-flow-row gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  <div class="grid grid-cols-1 grid-flow-row gap-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4">
     <div
       v-for="account of accounts"
       :key="account.user.id"
@@ -38,7 +38,7 @@ export default defineComponent({
     },
   },
   methods: {
-    removeAccount(id) {
+    removeAccount(id): void {
       this.$emit('delete', id);
     },
   },

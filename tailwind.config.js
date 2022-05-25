@@ -1,5 +1,13 @@
 module.exports = {
-  theme: {},
+  theme: {
+    extend: {
+      colors: {
+        blurple: '#5865F2',
+        'blurple-dark': '#454FBF',
+        'discord-dark': '#23272A',
+      },
+    },
+  },
   plugins: [],
   content: [
     'components/**/*.{vue,js}',

@@ -10,8 +10,8 @@
   />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'AccountAvatar',
   props: {
     user: {
@@ -52,5 +52,5 @@ export default {
       return `${CDN_URL}/avatars/${this.user.id}/${this.user.avatar}.${isAnimated ? 'gif' : this.format}`;
     },
   },
-};
+});
 </script>

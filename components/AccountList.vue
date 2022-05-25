@@ -28,8 +28,8 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'AccountList',
   props: {
     accounts: {
@@ -42,5 +42,5 @@ export default {
       this.$emit('delete', id);
     },
   },
-};
+});
 </script>

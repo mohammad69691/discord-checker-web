@@ -8,8 +8,8 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'Tooltip',
   props: {
     title: {
@@ -17,7 +17,7 @@ export default {
       required: true,
     },
   },
-};
+});
 </script>
 
 <style>

@@ -22,8 +22,8 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'BadgeList',
   props: {
     user: {
@@ -71,5 +71,5 @@ export default {
       return splitStr.join(' ');
     },
   },
-};
+});
 </script>

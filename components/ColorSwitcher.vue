@@ -6,13 +6,13 @@
   />
 </template>
 
-<script>
-export default {
+<script lang="ts">
+export default defineComponent({
   name: 'ColorSwitcher',
   computed: {
     isDarkMode() {
       return this.$colorMode.preference === 'dark';
     },
   },
-};
+});
 </script>

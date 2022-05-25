@@ -132,30 +132,24 @@ function downloadTokens() {
 <template>
   <div class="py-5 px-2 min-h-screen bg-gray-100 dark:bg-gray-900 md:px-4 lg:px-10">
     <div class="flex justify-between items-center">
-      <h1 class="flex items-center mr-4 text-2xl font-semibold dark:text-white">
-        <i class="mr-2 i-carbon-logo-discord" />
+      <h1 class="text-2xl font-semibold dark:text-white">
+        <FontAwesomeIcon :icon="['fab', 'discord']" class="mr-2" size="lg" />
         Discord Token Checker
-        <a
-          href="https://github.com/masterjanic"
-          class="hidden ml-2 text-sm text-gray-500 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 md:inline-flex"
-          >by masterjanic</a
-        >
       </h1>
 
-      <div class="flex space-x-2 text-xl justify-content-end">
+      <div class="flex items-center space-x-2 text-xl justify-content-end">
         <ColorSwitcher />
-        <a
-          href="https://github.com/masterjanic/discord-checker-web"
-          class="dark:bg-gray-50 dark:hover:bg-gray-200 i-carbon-logo-github"
-        />
+        <a href="https://github.com/masterjanic/discord-checker-web" class="dark:text-gray-50 dark:hover:text-gray-200"
+          ><FontAwesomeIcon :icon="['fab', 'github']" size="lg"
+        /></a>
       </div>
     </div>
 
     <div
-      class="flex items-center py-3 px-4 my-4 text-sm font-bold text-gray-800 bg-yellow-400 dark:bg-yellow-500 rounded-lg"
+      class="py-3 px-4 my-4 text-sm font-bold text-gray-800 bg-yellow-400 dark:bg-yellow-500 rounded-lg"
       role="alert"
     >
-      <i class="hidden mr-2 md:inline-flex i-carbon-warning-alt-filled" />
+      <FontAwesomeIcon icon="triangle-exclamation" class="hidden mr-2 md:inline-block" />
       <span
         >Discord recently increased the security of their tokens. Tokens starting with
         <code class="mx-0.5 text-red-600">mfa.</code> or of <code class="mx-0.5 text-red-600">length 59</code> will not
@@ -183,14 +177,17 @@ function downloadTokens() {
           class="text-white"
           title="This will enumerate user details of invalid tokens. Disable to save one request to the Discord API."
         >
-          <i class="flex text-gray-700 dark:text-gray-50 dark:hover:text-gray-200 i-carbon-help-filled" />
+          <FontAwesomeIcon icon="circle-question" class="text-gray-700 dark:text-gray-50 dark:hover:text-gray-200" />
         </Tooltip>
       </label>
 
       <div class="flex items-center">
         <label class="font-semibold text-black dark:text-white">Delay:</label>
         <Tooltip class="text-white" title="This is the wait time between each request in milliseconds.">
-          <i class="flex ml-2 text-gray-700 dark:text-gray-50 dark:hover:text-gray-200 i-carbon-help-filled" />
+          <FontAwesomeIcon
+            icon="circle-question"
+            class="ml-2 text-gray-700 dark:text-gray-50 dark:hover:text-gray-200"
+          />
         </Tooltip>
       </div>
 
@@ -212,28 +209,28 @@ function downloadTokens() {
     <div v-if="!isChecking" class="flex space-x-2">
       <input ref="fileUpload" class="hidden" type="file" accept=".txt" hidden multiple @change="loadFile" />
       <button
-        class="flex items-center p-2 mt-2 font-semibold text-gray-800 bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 rounded disabled:opacity-50 transition"
+        class="p-2 mt-2 font-semibold text-gray-800 bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 rounded disabled:opacity-50 transition"
         @click="() => fileUpload.click()"
       >
-        <i class="mr-2 i-carbon-upload" />
+        <FontAwesomeIcon icon="file-arrow-up" class="mr-2" />
         Load File(s)
       </button>
 
       <button
-        class="flex items-center p-2 mt-2 font-semibold text-gray-50 bg-blurple hover:bg-blurple-dark rounded disabled:opacity-50 transition"
+        class="p-2 mt-2 font-semibold text-gray-50 bg-blurple hover:bg-blurple-dark rounded disabled:opacity-50 transition"
         @click="checkTokens"
       >
-        <i class="mr-2 i-carbon-restart" />
+        <FontAwesomeIcon icon="rotate" class="mr-2" />
         Check Tokens
       </button>
     </div>
     <div v-else>
       <button
-        class="flex items-center p-2 mt-2 font-semibold text-gray-50 bg-red-400 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-600 rounded disabled:opacity-50 transition"
+        class="p-2 mt-2 font-semibold text-gray-50 bg-red-400 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-600 rounded disabled:opacity-50 transition"
         :disabled="pendingCancellation"
         @click="pendingCancellation = true"
       >
-        <i class="mr-2 i-carbon-stop-filled" />
+        <FontAwesomeIcon icon="circle-stop" class="mr-2" />
         Stop
       </button>
     </div>
@@ -249,7 +246,7 @@ function downloadTokens() {
         class="flex items-center p-2 mt-2 mb-4 font-semibold text-gray-50 bg-green-500 hover:bg-green-600 rounded disabled:opacity-50 transition"
         @click="downloadTokens()"
       >
-        <i class="mr-2 i-carbon-download" />
+        <FontAwesomeIcon icon="download" class="mr-2" />
         Download Tokens
       </button>
       <AccountList :accounts="verifiedAccounts" @delete="(id) => removeAccount(id)" />

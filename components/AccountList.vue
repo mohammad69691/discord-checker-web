@@ -19,8 +19,9 @@
           </div>
         </div>
 
-        <button
-          class="flex text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 i-carbon-close-filled"
+        <FontAwesomeIcon
+          icon="circle-xmark"
+          class="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 hover:cursor-pointer"
           @click="removeAccount(account.user.id)"
         />
       </div>

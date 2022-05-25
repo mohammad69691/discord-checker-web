@@ -1,9 +1,11 @@
 <template>
-  <i
-    class="dark:bg-gray-50 dark:hover:bg-gray-200 hover:cursor-pointer"
-    :class="isDarkMode ? 'i-carbon-moon' : 'i-carbon-sun'"
+  <FontAwesomeIcon
+    class="dark:text-gray-50 dark:hover:text-gray-200 hover:cursor-pointer"
+    :icon="isDarkMode ? 'moon' : 'sun'"
+    size="lg"
     @click="$colorMode.preference = isDarkMode ? 'light' : 'dark'"
-  />
+  >
+  </FontAwesomeIcon>
 </template>
 
 <script lang="ts">

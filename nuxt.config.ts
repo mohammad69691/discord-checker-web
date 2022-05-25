@@ -29,7 +29,8 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },
   },
-  modules: ['@nuxtjs/color-mode', '@nuxtjs/tailwindcss', '@unocss/nuxt'],
+  modules: ['@nuxtjs/color-mode', '@nuxtjs/tailwindcss'],
+  css: ['@fortawesome/fontawesome-svg-core/styles.css'],
   colorMode: {
     classSuffix: '',
     preference: 'dark',
@@ -37,13 +38,13 @@ export default defineNuxtConfig({
   tailwindcss: {
     viewer: false,
   },
-  unocss: {
-    preflight: false,
-    uno: false,
-    icons: {
-      scale: 1.3,
-    },
-    attributify: false,
+  build: {
+    transpile: [
+      '@fortawesome/fontawesome-svg-core',
+      '@fortawesome/free-solid-svg-icons',
+      '@fortawesome/free-brands-svg-icons',
+      '@fortawesome/vue-fontawesome',
+    ],
   },
   runtimeConfig: {
     public: {

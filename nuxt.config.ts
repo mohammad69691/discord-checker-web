@@ -1,30 +1,24 @@
 import { defineNuxtConfig } from 'nuxt';
 
+const title = 'Online Discord Token Checker';
+const description = 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.';
+
 export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
       meta: [
-        {
-          name: 'description',
-          content: 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.',
-        },
+        { name: 'description', content: description },
         { name: 'keywords', content: 'Discord, Discord Tokens, Token Stealer, Token Checker, Discord Tools' },
         { name: 'robots', content: 'index, follow' },
         { name: 'theme-color', content: '#5865F2' },
-        { property: 'og:title', content: 'Online Discord Token Checker' },
+        { property: 'og:title', content: title },
         { property: 'og:type', content: 'website' },
-        { property: 'og:site_name', content: 'Discord Token Checker' },
-        {
-          property: 'og:description',
-          content: 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.',
-        },
-        { name: 'twitter:title', content: 'Online Discord Token Checker' },
-        {
-          name: 'twitter:description',
-          content: 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.',
-        },
+        { property: 'og:description', content: description },
+        { name: 'twitter:card', content: 'summary' },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },

@@ -106,26 +106,8 @@ async function checkTokens() {
   isChecking.value = false;
 }
 
-function removeAccount(id) {
+function removeAccount(id: string) {
   validAccounts.value = validAccounts.value.filter((account) => account.user.id !== id);
-}
-
-function downloadTokens() {
-  const link = document.createElement('a');
-  link.setAttribute(
-    'href',
-    `data:text/plain;charset=utf-8,${encodeURIComponent(
-      verifiedAccounts.value.map((account) => account.tokens).join('\n')
-    )}`
-  );
-  link.setAttribute('download', `tokens-${new Date().toLocaleDateString('en-US').replaceAll('/', '_')}.txt`);
-
-  link.style.display = 'none';
-  document.body.appendChild(link);
-
-  link.click();
-
-  document.body.removeChild(link);
 }
 </script>
 
@@ -161,7 +143,7 @@ function downloadTokens() {
       :disabled="isChecking"
       placeholder="Enter your tokens..."
       spellcheck="false"
-      class="p-2 w-full h-96 font-mono text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 border-blurple focus:border-blurple-dark outline-none disabled:opacity-50 resize-none"
+      class="p-2 w-full h-96 font-mono text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 outline-none disabled:opacity-50 resize-none border-blurple focus:border-blurple-dark"
     />
 
     <div class="my-6">
@@ -169,7 +151,7 @@ function downloadTokens() {
         <input
           v-model="enumerateInvalid"
           type="checkbox"
-          class="w-5 h-5 checked:bg-blurple rounded border border-gray-300 checked:border-transparent focus:outline-none appearance-none"
+          class="w-5 h-5 rounded border border-gray-300 checked:border-transparent focus:outline-none appearance-none checked:bg-blurple"
         />
         <span class="font-semibold text-black dark:text-white">Enumerate Invalid Tokens</span>
 
@@ -217,7 +199,7 @@ function downloadTokens() {
       </button>
 
       <button
-        class="p-2 mt-2 font-semibold text-gray-50 bg-blurple hover:bg-blurple-dark rounded disabled:opacity-50 transition"
+        class="p-2 mt-2 font-semibold text-gray-50 rounded disabled:opacity-50 transition bg-blurple hover:bg-blurple-dark"
         @click="checkTokens"
       >
         <FontAwesomeIcon icon="rotate" class="mr-2" />
@@ -241,14 +223,7 @@ function downloadTokens() {
       </h2>
       <hr />
 
-      <button
-        :disabled="isChecking"
-        class="p-2 mt-2 mb-4 font-semibold text-gray-50 bg-green-500 hover:bg-green-600 rounded disabled:opacity-50 transition"
-        @click="downloadTokens()"
-      >
-        <FontAwesomeIcon icon="download" class="mr-2" />
-        Download Tokens
-      </button>
+      <ExportModal :is-disabled="isChecking" :accounts="verifiedAccounts" />
       <AccountList :accounts="verifiedAccounts" @delete="(id) => removeAccount(id)" />
     </div>
 

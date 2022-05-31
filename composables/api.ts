@@ -1,4 +1,4 @@
-import { BillingCountryResponse, DiscordUser } from '~/utils/types';
+import type { BillingCountryResponse, DiscordUser } from '~/utils/types';
 
 type RequestConfig = {
   data?: object;
@@ -18,7 +18,7 @@ async function apiRequest(uri: string, config: RequestConfig): Promise<any> {
     return await $fetch(url, { method, body: data, headers: token ? { Authorization: token } : {} });
   } catch (err) {
     if (err.response && err.response.status === 429) {
-      return apiRequest(uri, { data, token, delay: err.response.data.retry_after * 1000 });
+      return apiRequest(uri, { data, token, delay: err.response._data.retry_after * 1000 });
     }
 
     return null;

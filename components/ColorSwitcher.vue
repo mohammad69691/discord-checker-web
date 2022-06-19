@@ -4,8 +4,7 @@
     :icon="isDarkMode ? 'moon' : 'sun'"
     size="lg"
     @click="$colorMode.preference = isDarkMode ? 'light' : 'dark'"
-  >
-  </FontAwesomeIcon>
+  />
 </template>
 
 <script lang="ts">

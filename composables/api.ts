@@ -18,7 +18,7 @@ function snowflakeToMilliseconds(snowflake: string): number {
     return 0;
   }
 
-  return Number(BigInt(snowflake) >> 22n) + DISCORD_EPOCH;
+  return Math.floor(+snowflake / 4194304 + DISCORD_EPOCH);
 }
 
 /**

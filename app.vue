@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { DiscordAccount, InvalidDiscordAccount } from '~/utils/types';
-import Tooltip from '~/components/Tooltip.vue';
 
 useHead({
   title: 'Discord Token Checker - Find verified, unverified and nitro accounts',

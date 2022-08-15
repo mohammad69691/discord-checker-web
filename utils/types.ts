@@ -25,6 +25,28 @@ export type DiscordUser = {
   premium_type?: number;
 };
 
+export type UserProfile = {
+  user: DiscordUser;
+  connected_accounts?: Array<{
+    type: string;
+    id: string;
+    name: string;
+    verified: boolean;
+  }>;
+  mutual_guilds?: Array<{
+    id: string;
+    nick: string;
+  }>;
+  premium_since?: string;
+  premium_guild_since?: string;
+  premium_type?: number;
+  user_profile: {
+    bio?: string;
+    accent_color?: number;
+    banner?: string;
+  };
+};
+
 export type DiscordAccount = {
   user: DiscordUser;
   tokens: string[];

@@ -1,6 +1,6 @@
 <template>
   <FontAwesomeIcon
-    class="dark:text-gray-50 dark:hover:text-gray-200 hover:cursor-pointer"
+    class="hover:cursor-pointer dark:text-gray-50 dark:hover:text-gray-200"
     :icon="isDarkMode ? 'moon' : 'sun'"
     size="lg"
     @click="$colorMode.preference = isDarkMode ? 'light' : 'dark'"

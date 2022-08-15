@@ -1,4 +1,4 @@
-import type { BillingCountryResponse, DiscordUser } from '~/utils/types';
+import type { BillingCountryResponse, DiscordUser, UserProfile } from '~/utils/types';
 
 type RequestConfig = {
   data?: object;
@@ -6,6 +6,20 @@ type RequestConfig = {
   delay?: number;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
 };
+
+export const DISCORD_EPOCH = 1420070400000;
+
+/**
+ * Converts a Discord snowflake id to a milliseconds timestamp.
+ * @param snowflake
+ */
+function snowflakeToMilliseconds(snowflake: string): number {
+  if (!Number.isInteger(+snowflake)) {
+    return 0;
+  }
+
+  return Number(BigInt(snowflake) >> 22n) + DISCORD_EPOCH;
+}
 
 /**
  * Sends a request to the Discord api with the given data. If a rate limit is encountered, wait and retry.
@@ -20,10 +34,18 @@ async function apiRequest(uri: string, config: RequestConfig): Promise<any> {
     }
 
     const url = useRuntimeConfig().public.GATEWAY_URL + uri;
-    return await $fetch(url, { method, body: data, headers: token ? { Authorization: token } : {} });
+    return await $fetch(url, {
+      method,
+      body: data,
+      headers: token ? { Authorization: token } : {},
+    });
   } catch (err) {
     if (err.response && err.response.status === 429) {
-      return await apiRequest(uri, { data, token, delay: err.response._data.retry_after * 1000 });
+      return await apiRequest(uri, {
+        data,
+        token,
+        delay: err.response._data.retry_after * 1000,
+      });
     }
 
     return null;
@@ -49,4 +71,13 @@ function fetchBillingCountry(config: RequestConfig = {}): Promise<BillingCountry
   return apiRequest('/users/@me/billing/country-code', config);
 }
 
-export { fetchUser, fetchBillingCountry };
+/**
+ * Fetches and returns the user profile.
+ * @param userId The user id (snowflake)
+ * @param config The request config for this request.
+ */
+function fetchUserProfile(userId: string, config: RequestConfig = {}): Promise<UserProfile | null> {
+  return apiRequest(`/users/${userId}/profile?with_mutual_guilds=false`, config);
+}
+
+export { fetchUser, fetchBillingCountry, fetchUserProfile, snowflakeToMilliseconds };

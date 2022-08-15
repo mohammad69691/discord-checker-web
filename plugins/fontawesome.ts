@@ -10,6 +10,7 @@ import {
   faMoon,
   faSun,
   faCircleXmark,
+  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
 
@@ -18,6 +19,7 @@ config.autoAddCss = false;
 library.add(
   faTriangleExclamation,
   faCircleQuestion,
+  faCheckCircle,
   faFileArrowUp,
   faRotate,
   faCircleStop,

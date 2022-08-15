@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import type { DiscordAccount, InvalidDiscordAccount } from '~/utils/types';
+import Tooltip from '~/components/Tooltip.vue';
 
 useHead({
   title: 'Discord Token Checker - Find verified, unverified and nitro accounts',
 });
 
 const { ANALYTICS_URL } = useRuntimeConfig().public;
-// TODO: Remove left hand alternation when mfa tokens become invalid.
-const tokenRegex = /mfa\.[\w-]{84}|[A-Za-z\d]{24}\.[\w-]{6}\.[\w-]{27,38}/g;
+// TODO: Remove length 27 group when not supported anymore
+const tokenRegex = /[A-Za-z\d]{24}\.[\w-]{6}\.[\w-]{27,38}/g;
+
+const onlyShowNitro = ref<boolean>(false);
 
 const fileUpload = ref<HTMLInputElement>(null);
 const tokensInput = ref<string>('');
@@ -63,23 +66,25 @@ async function checkTokens() {
       return;
     }
 
+    const base64Id = token.split('.')[0];
+    const decodedId = atob(base64Id);
+    const creationMilliseconds = snowflakeToMilliseconds(decodedId);
+
+    const isValidId = creationMilliseconds > DISCORD_EPOCH && creationMilliseconds < Date.now();
+    if (!isValidId) {
+      invalidAccounts.value.push({ token, user: null });
+      continue;
+    }
+
     const user = await fetchUser('@me', { token, delay: +delay.value });
     if (!user) {
-      // Enumerate user from token
-      const base64Id = token.split('.')[0];
-      const decodedId = atob(base64Id);
       const existingAccount = validAccounts.value.find((account) => account.user.id === decodedId);
       if (existingAccount) {
         invalidAccounts.value.push({ token, user: existingAccount.user });
         continue;
       }
 
-      if (base64Id === 'mfa' || Number.isNaN(decodedId) || verifiedAccounts.value.length === 0) {
-        invalidAccounts.value.push({ token, user: null });
-        continue;
-      }
-
-      if (!enumerateInvalid.value) {
+      if (!enumerateInvalid.value || verifiedAccounts.value.length === 0) {
         invalidAccounts.value.push({ token, user: { id: decodedId } });
         continue;
       }
@@ -112,30 +117,29 @@ function removeAccount(id: string) {
 </script>
 
 <template>
-  <div class="py-5 px-2 min-h-screen bg-gray-100 dark:bg-gray-900 md:px-4 lg:px-10">
-    <div class="flex justify-between items-center">
+  <div class="min-h-screen bg-gray-100 py-5 px-2 dark:bg-gray-900 md:px-4 lg:px-10">
+    <div class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold dark:text-white">
         <FontAwesomeIcon :icon="['fab', 'discord']" class="mr-2" size="lg" />
         Discord Token Checker
       </h1>
 
-      <div class="flex items-center space-x-2 text-xl justify-content-end">
+      <div class="flex items-center space-x-2 text-xl">
         <ColorSwitcher />
-        <a href="https://github.com/masterjanic/discord-checker-web" class="dark:text-gray-50 dark:hover:text-gray-200"
-          ><FontAwesomeIcon :icon="['fab', 'github']" size="lg"
-        /></a>
+        <a href="https://github.com/masterjanic/discord-checker-web" class="dark:text-gray-50 dark:hover:text-gray-200">
+          <FontAwesomeIcon :icon="['fab', 'github']" size="lg" />
+        </a>
       </div>
     </div>
 
     <div
-      class="py-3 px-4 my-4 text-sm font-bold text-gray-800 bg-yellow-400 dark:bg-yellow-500 rounded-lg"
+      class="my-4 rounded-lg bg-yellow-400 py-3 px-4 text-sm font-bold text-gray-800 dark:bg-yellow-500"
       role="alert"
     >
-      <FontAwesomeIcon icon="triangle-exclamation" class="hidden mr-2 md:inline-block" />
+      <FontAwesomeIcon icon="triangle-exclamation" class="mr-2 hidden md:inline-block" />
       <span
         >Discord recently increased the security of their tokens. Tokens starting with
-        <code class="mx-0.5 text-red-600">mfa.</code> or of <code class="mx-0.5 text-red-600">length 59</code> will not
-        be supported in near future.</span
+        <code class="mx-0.5 text-red-600">mfa.</code> are not working anymore.</span
       >
     </div>
     <textarea
@@ -143,15 +147,15 @@ function removeAccount(id: string) {
       :disabled="isChecking"
       placeholder="Enter your tokens..."
       spellcheck="false"
-      class="p-2 w-full h-96 font-mono text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded border-2 outline-none disabled:opacity-50 resize-none border-blurple focus:border-blurple-dark"
+      class="border-blurple focus:border-blurple-dark h-96 w-full resize-none rounded border-2 bg-gray-200 p-2 font-mono text-gray-800 outline-none disabled:opacity-50 dark:bg-gray-800 dark:text-gray-200"
     />
 
     <div class="my-6">
-      <label class="flex items-center mb-8 space-x-3 hover:cursor-pointer">
+      <label class="mb-8 flex items-center space-x-3 hover:cursor-pointer">
         <input
           v-model="enumerateInvalid"
           type="checkbox"
-          class="w-5 h-5 rounded border border-gray-300 checked:border-transparent focus:outline-none appearance-none checked:bg-blurple"
+          class="checked:bg-blurple h-5 w-5 appearance-none rounded border border-gray-300 checked:border-transparent focus:outline-none"
         />
         <span class="font-semibold text-black dark:text-white">Enumerate Invalid Tokens</span>
 
@@ -175,13 +179,13 @@ function removeAccount(id: string) {
 
       <input
         v-model="delay"
-        class="overflow-hidden mt-3 w-full h-4 bg-gray-400 rounded-full appearance-none md:w-2/3 lg:w-1/2"
+        class="mt-3 h-4 w-full appearance-none overflow-hidden rounded-full bg-gray-400 md:w-2/3 lg:w-1/2"
         type="range"
         min="0"
         max="30000"
         step="100"
       />
-      <div class="flex justify-between w-full text-sm text-gray-900 dark:text-gray-400 md:w-2/3 lg:w-1/2">
+      <div class="flex w-full justify-between text-sm text-gray-900 dark:text-gray-400 md:w-2/3 lg:w-1/2">
         <span>0 ms</span>
         <span>{{ delay }}</span>
         <span>30000 ms</span>
@@ -191,7 +195,7 @@ function removeAccount(id: string) {
     <div v-if="!isChecking" class="flex space-x-2">
       <input ref="fileUpload" class="hidden" type="file" accept=".txt" hidden multiple @change="loadFile" />
       <button
-        class="p-2 mt-2 font-semibold text-gray-800 bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 rounded disabled:opacity-50 transition"
+        class="mt-2 rounded bg-yellow-400 p-2 font-semibold text-gray-800 transition hover:bg-yellow-500 disabled:opacity-50 dark:bg-yellow-500 dark:hover:bg-yellow-600"
         @click="() => fileUpload.click()"
       >
         <FontAwesomeIcon icon="file-arrow-up" class="mr-2" />
@@ -199,7 +203,7 @@ function removeAccount(id: string) {
       </button>
 
       <button
-        class="p-2 mt-2 font-semibold text-gray-50 rounded disabled:opacity-50 transition bg-blurple hover:bg-blurple-dark"
+        class="bg-blurple hover:bg-blurple-dark mt-2 rounded p-2 font-semibold text-gray-50 transition disabled:opacity-50"
         @click="checkTokens"
       >
         <FontAwesomeIcon icon="rotate" class="mr-2" />
@@ -208,7 +212,7 @@ function removeAccount(id: string) {
     </div>
     <div v-else>
       <button
-        class="p-2 mt-2 font-semibold text-gray-50 bg-red-400 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-600 rounded disabled:opacity-50 transition"
+        class="mt-2 rounded bg-red-400 p-2 font-semibold text-gray-50 transition hover:bg-red-500 disabled:opacity-50 dark:bg-red-500 dark:hover:bg-red-600"
         :disabled="pendingCancellation"
         @click="pendingCancellation = true"
       >
@@ -218,17 +222,33 @@ function removeAccount(id: string) {
     </div>
 
     <div v-if="verifiedAccounts.length > 0" class="my-10 dark:text-white">
-      <h2 class="text-2xl font-semibold tracking-wide text-center">
+      <h2 class="text-center text-2xl font-semibold tracking-wide">
         Verified Accounts ({{ verifiedAccounts.length }})
       </h2>
       <hr />
 
-      <ExportModal :is-disabled="isChecking" :accounts="verifiedAccounts" />
-      <AccountList :accounts="verifiedAccounts" @delete="(id) => removeAccount(id)" />
+      <div class="flex items-center space-x-2">
+        <ExportModal :is-disabled="isChecking" :accounts="verifiedAccounts" />
+        <Tooltip title="Only Show Nitro Accounts">
+          <button
+            :disabled="isChecking"
+            :class="!onlyShowNitro ? `bg-gray-700 hover:bg-gray-800` : `bg-red-500 hover:bg-red-600`"
+            class="mt-2 mb-4 rounded p-2 transition disabled:opacity-50"
+            @click="onlyShowNitro = !onlyShowNitro"
+          >
+            <img src="/img/badges/nitro.svg" class="drop-shadow" width="32" height="32" alt="Nitro" />
+          </button>
+        </Tooltip>
+      </div>
+
+      <AccountList
+        :accounts="verifiedAccounts.filter((account) => (onlyShowNitro ? account.user.premium_type > 0 : true))"
+        @delete="(id) => removeAccount(id)"
+      />
     </div>
 
     <div v-if="unverifiedAccounts.length > 0" class="my-10 dark:text-white">
-      <h2 class="text-2xl font-semibold tracking-wide text-center">
+      <h2 class="text-center text-2xl font-semibold tracking-wide">
         Unverified Accounts ({{ unverifiedAccounts.length }})
       </h2>
       <hr />
@@ -236,14 +256,14 @@ function removeAccount(id: string) {
     </div>
 
     <div v-if="invalidAccounts.length > 0" class="my-10 dark:text-white">
-      <h2 class="text-2xl font-semibold tracking-wide text-center">Invalid Tokens ({{ invalidAccounts.length }})</h2>
+      <h2 class="text-center text-2xl font-semibold tracking-wide">Invalid Tokens ({{ invalidAccounts.length }})</h2>
       <hr />
 
-      <div class="grid grid-cols-1 grid-flow-row gap-4 xl:grid-cols-2">
+      <div class="grid grid-flow-row grid-cols-1 gap-4 xl:grid-cols-2">
         <div
           v-for="entry of invalidAccounts"
           :key="entry.token"
-          class="flex flex-col p-5 bg-gray-200 dark:bg-gray-800 rounded-lg drop-shadow-lg dark:drop-shadow-none transition ease-in-out hover:-translate-y-1 hover:scale-102"
+          class="hover:scale-102 flex flex-col rounded-lg bg-gray-200 p-5 drop-shadow-lg transition ease-in-out hover:-translate-y-1 dark:bg-gray-800 dark:drop-shadow-none"
         >
           <span class="break-all">{{ entry.token }}</span>
           <small v-if="!entry.user || !entry.user.username" class="text-gray-700 dark:text-gray-400">
@@ -258,10 +278,10 @@ function removeAccount(id: string) {
     </div>
 
     <div v-if="duplicate > 0" class="my-10 text-white">
-      <h2 class="text-2xl font-semibold tracking-wide text-center">Duplicate Tokens ({{ duplicate }})</h2>
+      <h2 class="text-center text-2xl font-semibold tracking-wide">Duplicate Tokens ({{ duplicate }})</h2>
       <hr />
 
-      <div class="p-3 text-center bg-violet-800 rounded-lg">
+      <div class="rounded-lg bg-violet-800 p-3 text-center">
         <span class="font-semibold text-white"
           >Duplicate tokens were removed before sending requests to the Discord API.</span
         >

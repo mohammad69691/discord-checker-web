@@ -2,7 +2,7 @@
   <div @keydown.esc="toggleModal">
     <button
       :disabled="isDisabled"
-      class="p-2 mt-2 mb-4 font-semibold text-gray-50 bg-green-500 hover:bg-green-600 rounded disabled:opacity-50 transition"
+      class="mt-2 mb-4 rounded bg-green-500 p-2 font-semibold text-gray-50 transition hover:bg-green-600 disabled:opacity-50"
       @click="toggleModal"
     >
       <FontAwesomeIcon icon="download" class="mr-2" />
@@ -10,41 +10,41 @@
     </button>
 
     <div
-      class="flex fixed top-0 left-0 z-50 justify-center items-center w-full h-full transition"
+      class="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center transition"
       :class="{ 'opacity-0 pointer-events-none': !shown }"
     >
-      <div class="absolute w-full h-full bg-gray-800 opacity-90"></div>
+      <div class="absolute h-full w-full bg-gray-800 opacity-90"></div>
 
-      <div class="overflow-y-auto z-50 mx-auto w-11/12 bg-gray-100 dark:bg-gray-900 rounded shadow-lg md:max-w-md">
+      <div class="z-50 mx-auto w-11/12 overflow-y-auto rounded bg-gray-100 shadow-lg dark:bg-gray-900 md:max-w-md">
         <div class="py-4 px-6 text-left">
-          <div class="flex justify-between items-center pb-3">
+          <div class="flex items-center justify-between pb-3">
             <div class="flex items-center space-x-3">
               <FontAwesomeIcon icon="download" size="lg" />
               <h5 class="text-2xl font-bold text-black dark:text-white">Download Tokens</h5>
             </div>
 
-            <div class="flex z-50 items-center cursor-pointer" @click="toggleModal">
+            <div class="z-50 flex cursor-pointer items-center" @click="toggleModal">
               <FontAwesomeIcon
                 icon="circle-xmark"
-                class="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500 hover:cursor-pointer"
+                class="text-red-500 hover:cursor-pointer hover:text-red-600 dark:text-red-400 dark:hover:text-red-500"
               />
             </div>
           </div>
-          <span class="block mb-3 text-gray-700 dark:text-gray-400"
+          <span class="mb-3 block text-gray-700 dark:text-gray-400"
             >Export your tokens in one of the supported formats (.txt or .csv)</span
           >
 
           <label class="font-semibold text-black dark:text-white">File Type:</label>
           <select
             v-model="exportType"
-            class="p-2 mt-1.5 w-full text-black dark:text-white bg-gray-200 dark:bg-gray-800 rounded border-2 outline-none border-blurple focus:border-blurple-dark"
+            class="border-blurple focus:border-blurple-dark mt-1.5 w-full rounded border-2 bg-gray-200 p-2 text-black outline-none dark:bg-gray-800 dark:text-white"
           >
             <option v-for="type in ['txt', 'csv']" :key="type" :value="type">.{{ type }} File</option>
           </select>
 
           <div class="mt-3">
             <label class="font-semibold text-white">Values:</label>
-            <div class="grid grid-cols-1 gap-2 mt-2 md:grid-cols-2">
+            <div class="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
               <label
                 v-for="value in Object.keys(values)"
                 :key="`v-${value}`"
@@ -53,7 +53,7 @@
                 <input
                   v-model="values[value]"
                   type="checkbox"
-                  class="w-5 h-5 rounded border border-gray-300 checked:border-transparent focus:outline-none appearance-none checked:bg-blurple"
+                  class="checked:bg-blurple h-5 w-5 appearance-none rounded border border-gray-300 checked:border-transparent focus:outline-none"
                   checked
                 />
                 <span class="font-semibold text-black dark:text-white">{{ value.toUpperCase() }}</span>
@@ -61,9 +61,9 @@
             </div>
           </div>
 
-          <div class="flex justify-end mt-10 border-t border-gray-400 dark:border-gray-600">
+          <div class="mt-10 flex justify-end border-t border-gray-400 dark:border-gray-600">
             <button
-              class="p-2 mt-3 font-semibold text-gray-50 bg-green-500 hover:bg-green-600 rounded disabled:opacity-50 transition"
+              class="mt-3 rounded bg-green-500 p-2 font-semibold text-gray-50 transition hover:bg-green-600 disabled:opacity-50"
               @click="downloadTokens"
             >
               <FontAwesomeIcon icon="download" class="mr-2" />

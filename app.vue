@@ -300,7 +300,9 @@ hr {
   border-color: #fff;
 }
 
-input[type='range']::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb,
+input[type='range']::-moz-range-thumb,
+input[type='range']::-ms-thumb {
   width: 15px;
   -webkit-appearance: none;
   appearance: none;

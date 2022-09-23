@@ -33,7 +33,9 @@
       >
         <div class="absolute h-full w-full bg-gray-800 opacity-90"></div>
 
-        <div class="z-50 mx-auto w-11/12 overflow-y-auto rounded bg-gray-100 shadow-lg dark:bg-gray-900 md:max-w-xl">
+        <div
+          class="z-50 mx-auto max-h-full w-11/12 overflow-y-auto rounded bg-gray-100 shadow-lg dark:bg-gray-900 md:max-w-xl"
+        >
           <div class="py-4 px-6 text-left">
             <div class="flex items-center justify-between pb-3">
               <div class="flex items-center space-x-3">

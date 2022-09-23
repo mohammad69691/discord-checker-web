@@ -1,5 +1,3 @@
-import { defineNuxtConfig } from 'nuxt';
-
 const title = 'Online Discord Token Checker';
 const description = 'A fast, web-based Discord token checker. Find verified, unverified and nitro accounts easily.';
 

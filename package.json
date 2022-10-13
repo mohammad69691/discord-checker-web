@@ -12,10 +12,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@nuxtjs/color-mode": "^3.1.6",
+    "@nuxtjs/color-mode": "^3.1.8",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
-    "@nuxtjs/tailwindcss": "^5.3.3",
-    "eslint": "^8.23.1",
+    "@nuxtjs/tailwindcss": "^5.3.5",
+    "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",

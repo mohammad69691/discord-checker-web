@@ -14,13 +14,13 @@
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.1.8",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
-    "@nuxtjs/tailwindcss": "^5.3.5",
-    "eslint": "^8.25.0",
+    "@nuxtjs/tailwindcss": "^6.1.3",
+    "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-tailwindcss": "^3.6.2",
-    "nuxt": "3.0.0-rc.11",
+    "eslint-plugin-tailwindcss": "^3.7.0",
+    "nuxt": "3.0.0-rc.13",
     "prettier": "^2.7.1"
   },
   "dependencies": {
